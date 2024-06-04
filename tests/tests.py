@@ -1,6 +1,6 @@
 import requests
 import pytest
-from config import BASE_URL, TEST_URL, XPATH_CLASS
+from config import BASE_URL, TEST_URL, XPATH_CLASS, XPATH_DOWNLOAD_NEXT
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
@@ -23,7 +23,10 @@ def test_button_exist(browser):
     browser.get(BASE_URL+"search?q=туалетная бумага 3 слоя")
     # assert browser.find_element(By.ID, 'submit-id-submit').is_displayed()
     el = WebDriverWait(browser, 20).until(ec.presence_of_element_located((By.XPATH, XPATH_CLASS)))
-    item = browser.find_elements(By.XPATH, XPATH_CLASS)
-    p_text = item[0].text
-    print(f"Текст элемента = {p_text}, количество = {len(item)}")
+    while(True):
+        el = browser.find_element(By.XPATH, XPATH_DOWNLOAD_NEXT)
+        # if el
+        item = browser.find_elements(By.XPATH, XPATH_CLASS)
+        p_text = item[0].text
+        print(f"Текст элемента = {p_text}, количество = {len(item)}")
     browser.quit()
