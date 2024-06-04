@@ -1,17 +1,18 @@
 import requests
 import pytest
-from config import BASE_URL, TEST_URL, XPATH_CLASS, XPATH_DOWNLOAD_NEXT
+from config import *
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
+from selenium.common.exceptions import NoSuchElementException
 
 
 @pytest.fixture()
 def browser():
     options = Options()
-    options.add_argument("--headless=new")
+    # options.add_argument("--headless=new")
     chrome_browser = webdriver.Chrome(options=options)
     return chrome_browser
 def test_open_site():
@@ -20,13 +21,28 @@ def test_open_site():
     print(res.status_code)
 
 def test_button_exist(browser):
-    browser.get(BASE_URL+"search?q=туалетная бумага 3 слоя")
+    browser.get(BASE_URL+f"search?q=туалетная бумага 3 слоя&brand={BRAND_ZEWA}")
     # assert browser.find_element(By.ID, 'submit-id-submit').is_displayed()
-    el = WebDriverWait(browser, 20).until(ec.presence_of_element_located((By.XPATH, XPATH_CLASS)))
-    while(True):
-        el = browser.find_element(By.XPATH, XPATH_DOWNLOAD_NEXT)
+    button_next_exist = True
+    sum = 0
+    count_item = WebDriverWait(browser, 70).until(ec.presence_of_element_located((By.XPATH, XPATH_COUNT)))
+    # while(button_next_exist):
+
+    browser.implicitly_wait(15)
+    item = browser.find_elements(By.XPATH, XPATH_CLASS)
+
+    p_text = item[0].text
+
+    print(f"Текст элемента = {p_text}, количество = {len(item)}")
+        # try:
+        #     next_button = browser.find_element(By.XPATH, XPATH_DOWNLOAD_NEXT)
+        #     next_button.click()
+        #     browser.implicitly_wait(15)
+        # except NoSuchElementException:
+        #     button_next_exist = False
+    print(f"Всего товаров: {sum}")
+
+
+
         # if el
-        item = browser.find_elements(By.XPATH, XPATH_CLASS)
-        p_text = item[0].text
-        print(f"Текст элемента = {p_text}, количество = {len(item)}")
     browser.quit()
