@@ -23,7 +23,7 @@ def test_button_exist(browser):
     browser.get(BASE_URL+"search?q=туалетная бумага 3 слоя")
     # assert browser.find_element(By.ID, 'submit-id-submit').is_displayed()
     el = WebDriverWait(browser, 20).until(ec.presence_of_element_located((By.XPATH, XPATH_CLASS)))
-    col = browser.find_elements(By.XPATH, XPATH_CLASS)
-    p_text = col[0].text
-    print("Текст элемента = ", p_text)
+    item = browser.find_elements(By.XPATH, XPATH_CLASS)
+    p_text = item[0].text
+    print(f"Текст элемента = {p_text}, количество = {len(item)}")
     browser.quit()
