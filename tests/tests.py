@@ -14,7 +14,7 @@ from selenium.common.exceptions import NoSuchElementException
 @pytest.fixture()
 def browser():
     options = Options()
-    # options.add_argument("--headless=new")
+    options.add_argument("--headless=new")
     chrome_browser = webdriver.Chrome(options=options)
     return chrome_browser
 
