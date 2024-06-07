@@ -13,6 +13,7 @@ on:
           - test_canonical_link_exist
           - test_button_reviews_exist
           - test_response_time
+          - all_tests
 
 
 jobs:
