@@ -5,6 +5,8 @@ XPATH_COUNT = "/html/body/div/div/div[2]/div[1]/span"
 XPATH_DOWNLOAD_NEXT = "//button[contains(text(),'Загрузить еще')]"
 BRAND_PAPIA = 'papia'
 BRAND_ZEWA = 'zewa'
+XPATH_IMG_WITHOUT_ALT = "//img[not(@alt)]"
+# XPATH_CANONICAL_LINK = "/html/head/link[@rel='canonical']"
 
 XPATH_CANONICAL_LINK = "//link[@rel='canonical']"
 XPATH_COUNT_PRODUCT = "//span[@class='css-meuap9']"

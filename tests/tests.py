@@ -2,10 +2,12 @@ import requests
 import pytest
 from config import *
 from selenium import webdriver
+from selenium.webdriver import Keys, ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
+import time
 from selenium.common.exceptions import NoSuchElementException
 
 
@@ -19,7 +21,19 @@ def browser():
 def test_open_site():
     res = requests.get(BASE_URL)
     assert res.status_code == 200
-    print(res.status_code)
+    print(res.text.find())
+
+def test_img_alt_exist(browser):
+    """ Проверка наличия в изображениях атрибута alt """
+    browser.get(BASE_URL + f"search?q=туалетная бумага 3 слоя&brand={BRAND_ZEWA}")
+    img_without_alt = browser.find_elements(By.XPATH, XPATH_IMG_WITHOUT_ALT)
+    assert len(img_without_alt) == 0
+
+def test_canonical_link_exist(browser):
+    """ Проверка наличия canonical link на странице"""
+    browser.get(BASE_URL + f"search?q=туалетная бумага 3 слоя&brand={BRAND_ZEWA}")
+    canonical_link = browser.find_elements(By.XPATH, XPATH_CANONICAL_LINK)
+    assert len(canonical_link) > 0
 
 def test_button_exist(browser):
     browser.get(BASE_URL+f"search?q=туалетная бумага 3 слоя&brand={BRAND_ZEWA}")
@@ -49,14 +63,24 @@ def test_canonical_link_exist(browser):
         assert len(browser.find_elements(By.XPATH, XPATH_CANONICAL_LINK)) > 0
     browser.quit()
 
-def test_reviews_exist(browser):
+def test_button_reviews_exist(browser):
     browser.get(BASE_URL + "search?q=стеллаж")
     count_item = WebDriverWait(browser, 70).until(ec.presence_of_element_located((By.XPATH, XPATH_COUNT)))
-    reviews = browser.find_elements(By.CLASS_NAME, 'reviews')
-    print(count_item.text)
-    print(f"Count rev= {len(reviews)}")
-    assert len(reviews) > 0
+    # reviews = browser.find_elements(By.CLASS_NAME, 'reviews')
+    products = browser.find_elements(By.CLASS_NAME, 'css-k9eowz')
+    button_reviews_exist = True
+    for i in products:
+        ActionChains(browser).move_to_element(i).pause(1).perform()
+        # button_reviews_exist = button_reviews_exist and browser.find_element(By.CLASS_NAME, 'reviews').is_displayed()
+        button_reviews = WebDriverWait(browser, 60).until(ec.element_to_be_clickable((By.CLASS_NAME, 'reviews')))
+        if not button_reviews.is_enabled():
+            button_reviews_exist = False
+    # reviews_item = WebDriverWait(browser, 3).until(ec.element_to_be_clickable((By.CLASS_NAME, 'reviews')))
+    assert button_reviews_exist == True
+    # ActionChains(browser).click(reviews_item).perform()
+    # time.sleep(5)
+    # print(reviews_item.)
+    # print(f"Count rev= {len(reviews)}")
+    # assert len(reviews) > 0
     browser.quit()
-'css-k9eowz'
-def test
-    browser.quit()
+# 'css-k9eowz'
