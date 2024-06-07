@@ -1,7 +1,19 @@
 name: Automated tests
 
 on:
-  push
+  workflow_dispatch:
+    inputs:
+      deployment_target:
+        description: Выберите тест
+        required: true
+        default: all_tests
+        type: choice
+        options:
+          - test_img_alt_exist
+          - test_canonical_link_exist
+          - test_button_reviews_exist
+          - test_response_time
+
 
 jobs:
   test:
@@ -17,9 +29,18 @@ jobs:
         run: sudo apt-get install google-chrome-stable
       - name: Install dependencies
         run: pip install -r requirements.txt
-      - name: Run tests
+      - name: test_img_alt_exist
+        if: "github.event.inputs.deployment_target == 'test_img_alt_exist'"
+        run: pytest tests/tests.py::test_img_alt_exist
+      - name: test_canonical_link_exist
+        if: "github.event.inputs.deployment_target == 'test_canonical_link_exist'"
+        run: pytest tests/tests.py::test_canonical_link_exist
+      - name: test_button_reviews_exist
+        if: "github.event.inputs.deployment_target == 'test_button_reviews_exist'"
+        run: pytest tests/tests.py::test_button_reviews_exist
+      - name: test_response_time
+        if: "github.event.inputs.deployment_target == 'test_response_time'"
+        run: pytest tests/tests.py::test_response_time
+      - name: all_tests
+        if: "github.event.inputs.deployment_target == 'all_tests'"
         run: pytest tests/tests.py
-
-
-
-
