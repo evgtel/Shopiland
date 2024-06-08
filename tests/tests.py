@@ -1,4 +1,3 @@
-import requests
 import pytest
 from config import *
 from selenium import webdriver
@@ -34,6 +33,7 @@ def test_canonical_link_exist(browser):
     browser.quit()
 
 def test_button_reviews_exist(browser):
+    """ Проверка наличия кнопки 'Отзывы' при наведении указателя на карточку товара"""
     browser.get(BASE_URL + "search?q=стеллаж")
     count_item = WebDriverWait(browser, 90).until(ec.presence_of_element_located((By.XPATH, XPATH_COUNT)))
     products = browser.find_elements(By.CLASS_NAME, 'css-k9eowz')
@@ -46,6 +46,7 @@ def test_button_reviews_exist(browser):
     browser.quit()
 
 def test_response_time(browser):
+    """ Проверка задержки выдачи результата поиска"""
     start_time = time.time()
     browser.get(BASE_URL + "search?q=стеллаж")
     count_item = WebDriverWait(browser, 90).until(ec.presence_of_element_located((By.XPATH, XPATH_COUNT)))
